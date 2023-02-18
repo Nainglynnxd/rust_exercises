@@ -23,7 +23,7 @@ fn decifrac_to_binary(decifrac: &mut f64) -> String {
     let mut frac = ((*decifrac - *decifrac as i64 as f64) * 100.0).round() / 100.0;
 
     for _ in 0..=3 {
-        frac = frac * 2f64;
+        frac *= 2f64;
         if frac >= 1f64 {
             binary.push_str(&1.to_string());
             frac = ((frac - frac as i64 as f64) * 100.0).round() / 100.0;
@@ -44,7 +44,7 @@ fn decimal_to_binary(decimal: &mut i32) -> String {
             return binary.chars().rev().collect::<String>();
         } else {
             binary.push_str(&(*decimal % 2).to_string());
-            *decimal = *decimal / 2;
+            *decimal /= 2;
         }
     }
 }

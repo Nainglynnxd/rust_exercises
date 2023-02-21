@@ -1,8 +1,8 @@
-extern crate test_here;
+extern crate rust_exercises;
 
+use rust_exercises::run;
 use std::env;
 use std::process;
-use test_here::run;
 
 fn main() {
     let mut args = env::args();
@@ -20,7 +20,7 @@ fn main() {
             }
         },
         None => {
-            eprintln!("\nProvide arguements! db or bd");
+            eprintln!("\nProvide arguments! db or bd");
             process::exit(1);
         }
     };

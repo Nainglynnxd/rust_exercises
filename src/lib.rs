@@ -33,16 +33,13 @@ pub fn run(flag: &str) {
             }
         }
         BinaryToDecimal => {
-            let v: Vec<&str> = input.split("").collect();
-            let trimmed = &v[1..(v.len() - 2)]; //cut out new line character and two double quotes
-
-            if trimmed.iter().any(|&i| {
-                let y: i64 = i.parse().unwrap();
-                !(0..=1).contains(&y)
-            }) {
-                println!("Bruh, I'm out!! Binary Numbers Only!!");
+            if input.contains('.') {
+                let input = input.split('.').collect::<Vec<&str>>();
+                println!("{}", bifrac_to_decifrac(input[0], input[1].trim()));
             } else {
-                println!("Decimal: {}", binary_to_decimal(trimmed.to_vec()));
+                let mut input = cast_char_to_string(&input);
+                input.remove(input.len() - 1);
+                println!("Decimal: {}", binary_to_decimal(input));
             }
         }
     }
@@ -80,7 +77,7 @@ fn decimal_to_binary(decimal: &mut i32) -> String {
     }
 }
 
-fn binary_to_decimal(binary_input: Vec<&str>) -> i64 {
+fn binary_to_decimal(binary_input: Vec<String>) -> i64 {
     let mut decimal = 0;
 
     for (index, value) in binary_input.iter().enumerate() {
@@ -93,4 +90,44 @@ fn binary_to_decimal(binary_input: Vec<&str>) -> i64 {
         }
     }
     decimal
+}
+
+fn check_validity_input(input: &str) {
+    let input = cast_char_to_string(input);
+
+    for k in input.iter() {
+        let num = k.parse::<i64>().unwrap();
+        if num > 1 {
+            eprintln!("0 and 1 only bruh!! I'm out!!");
+            std::process::exit(1);
+        }
+    }
+}
+
+fn bifrac_to_decifrac(binary: &str, fraction: &str) -> String {
+    check_validity_input(binary);
+    check_validity_input(fraction);
+
+    let mut sum_of_fraction = 0.0;
+    let fraction = cast_char_to_string(fraction);
+    let binary = cast_char_to_string(binary);
+    let mut factor = 1f64;
+    for value in fraction.iter() {
+        factor *= 2.0;
+        let k: f64 = value.parse().unwrap();
+        sum_of_fraction += k / factor;
+    }
+
+    format!(
+        "Decimal: {}",
+        binary_to_decimal(binary) as f64 + sum_of_fraction
+    )
+}
+
+fn cast_char_to_string(input: &str) -> Vec<String> {
+    //cast each char into String and store inside Vec
+    input
+        .chars()
+        .map(|i| i.to_string())
+        .collect::<Vec<String>>()
 }

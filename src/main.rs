@@ -23,5 +23,5 @@ fn main() {
             eprintln!("\nProvide arguments! db or bd");
             process::exit(1);
         }
-    };
+    }
 }
